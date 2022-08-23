@@ -8,7 +8,7 @@ const errorMiddleware = (
   next: NextFunction
 ) => {
   const status = error.status || 500;
-  const messsage = error.message || "Something is wrong";
+  const messsage = error.message || "Error! Something is wrong";
   res.status(status).json({ status, messsage });
 };
 
