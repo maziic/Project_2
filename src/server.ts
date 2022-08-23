@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import bodyParser from "body-parser";
 import errorMiddleware from "./middleware/error.middleware";
 import config from "./config";
+import routes from "./routes";
 // import db from "./database";
 // import { Client } from "pg";
 
@@ -10,20 +11,22 @@ const address: string = "0.0.0.0:" + (config.port || 3000);
 
 app.use(bodyParser.json());
 
+app.use("/api", routes);
+
 // get request
 
 app.get("/", function (req: Request, res: Response) {
   res.send("'Hello World!");
 });
 
-// post request
+// // post request
 
-app.post("/", function (req: Request, res: Response) {
-  res.json({
-    message: "Hello Post World!",
-    data: req.body,
-  });
-});
+// app.post("/", function (req: Request, res: Response) {
+//   res.json({
+//     message: "Hello Post World!",
+//     data: req.body,
+//   });
+// });
 
 // //db test
 // db.connect().then((client) => {
