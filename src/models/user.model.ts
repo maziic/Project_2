@@ -1,5 +1,13 @@
 import db from "../database";
+import bcrypt from "bcrypt";
 import User from "../types/user.type";
+import config from "../config";
+
+const hashPass = (password: string) => {
+  //const salt = config.salt as unknown as number;
+  const salt = parseInt(config.salt as string, 10);
+  return bcrypt.hashSync(`${password}${config.peper}`, salt);
+};
 
 class UserModel {
   // Create User Endpoint
@@ -14,7 +22,7 @@ class UserModel {
         u.user_name,
         u.first_name,
         u.last_name,
-        u.password,
+        hashPass(u.password),
       ]);
 
       connection.release();
@@ -30,7 +38,8 @@ class UserModel {
   async index(): Promise<User[]> {
     try {
       const connection = await db.connect();
-      const sql = "SELECT id,email,user_name,first_name,last_name from users";
+      const sql =
+        "SELECT id,email,user_name,first_name,last_name,password from users";
       const result = await connection.query(sql);
       connection.release();
       return result.rows;
@@ -39,7 +48,7 @@ class UserModel {
     }
   }
 
-  // Show Users Endpoint
+  // Show User Endpoint
   async show(id: string): Promise<User> {
     try {
       const sql = `SELECT id,email,user_name,first_name,last_name FROM users

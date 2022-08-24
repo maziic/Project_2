@@ -11,6 +11,8 @@ const {
   PGDATABASE_TEST,
   PGPASSWORD,
   PGPORT,
+  SECRET,
+  SALT_ROUNDS,
 } = process.env;
 
 export default {
@@ -20,4 +22,6 @@ export default {
   user: PGUSER,
   password: PGPASSWORD,
   dbPort: PGPORT,
+  peper: SECRET,
+  salt: SALT_ROUNDS,
 };
