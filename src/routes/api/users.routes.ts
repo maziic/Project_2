@@ -10,4 +10,6 @@ const routes = Router();
 routes.route("/").get(controllers.index).post(controllers.create);
 routes.route("/:id").get(controllers.show).delete(controllers.del);
 
+routes.route("/authenticate").post(controllers.authenticate);
+
 export default routes;

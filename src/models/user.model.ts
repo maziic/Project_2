@@ -78,5 +78,33 @@ class UserModel {
       );
     }
   }
+
+  // authenticate user
+
+  async authenticate(user_name: string, password: string) {
+    try {
+      const connect = await db.connect();
+      const sql = "SELECT password FROM users WHERE user_name=$1";
+      const result = await connect.query(sql, [user_name]);
+      if (result.rows.length) {
+        const { password: hashPass } = result.rows[0];
+        const checkpass = bcrypt.compareSync(
+          `${password}${config.peper}`,
+          hashPass
+        );
+        if (checkpass) {
+          const userInfo = await connect.query(
+            "SELECT * FROM users WHERE user_name=($1)",
+            [user_name]
+          );
+          return userInfo.rows[0];
+        }
+        connect.release();
+        return null;
+      }
+    } catch (error) {
+      throw new Error(`unable to login: ${(error as Error).message}`);
+    }
+  }
 }
 export default UserModel;

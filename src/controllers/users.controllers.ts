@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import UserModel from "../models/user.model";
+import config from "../config";
+import jwt from "jsonwebtoken";
 
 const userModel = new UserModel();
 
@@ -54,5 +56,30 @@ export const del = async (req: Request, res: Response, next: NextFunction) => {
     });
   } catch (err) {
     next(err);
+  }
+};
+
+export const authenticate = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { user_name, password } = req.body;
+    const user = await userModel.authenticate(user_name, password);
+    const token = jwt.sign({ user }, config.token as unknown as string);
+    if (!user) {
+      return res.status(401).json({
+        status: "error",
+        message: "the username and password do not match",
+      });
+    }
+    return res.json({
+      status: "success",
+      data: { ...user, token },
+      message: "user authenticated successfully",
+    });
+  } catch (err) {
+    return next(err);
   }
 };

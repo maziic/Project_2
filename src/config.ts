@@ -13,6 +13,7 @@ const {
   PGPORT,
   SECRET,
   SALT_ROUNDS,
+  TOKEN,
 } = process.env;
 
 export default {
@@ -24,4 +25,5 @@ export default {
   dbPort: PGPORT,
   peper: SECRET,
   salt: SALT_ROUNDS,
+  token: TOKEN,
 };
