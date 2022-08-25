@@ -68,6 +68,7 @@ export const authenticate = async (
     const { user_name, password } = req.body;
     const user = await userModel.authenticate(user_name, password);
     const token = jwt.sign({ user }, config.token as unknown as string);
+    console.log("a7a");
     if (!user) {
       return res.status(401).json({
         status: "error",

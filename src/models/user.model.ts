@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import User from "../types/user.type";
 import config from "../config";
 
-const hashPass = (password: string) => {
+export const hashPass = (password: string) => {
   //const salt = config.salt as unknown as number;
   const salt = parseInt(config.salt as string, 10);
   return bcrypt.hashSync(`${password}${config.peper}`, salt);
@@ -14,9 +14,7 @@ class UserModel {
   async create(u: User): Promise<User> {
     try {
       const connection = await db.connect();
-      const sql = `INSERT INTO users(email,user_name,first_name,last_name,password)
-            values($1,$2,$3,$4,$5)returning*`;
-
+      const sql = `INSERT INTO users(email,user_name,first_name,last_name,password) VALUES($1,$2,$3,$4,$5)RETURNING*`;
       const result = await connection.query(sql, [
         u.email,
         u.user_name,
@@ -24,12 +22,11 @@ class UserModel {
         u.last_name,
         hashPass(u.password),
       ]);
-
       connection.release();
       return result.rows[0];
     } catch (error) {
       throw new Error(
-        "Unable to create(${u.user_name]):${(error as Error).message}"
+        `Unable to create(${u.user_name})${(error as Error).message}`
       );
     }
   }
@@ -92,13 +89,16 @@ class UserModel {
           `${password}${config.peper}`,
           hashPass
         );
+
         if (checkpass) {
           const userInfo = await connect.query(
             "SELECT * FROM users WHERE user_name=($1)",
             [user_name]
           );
+
           return userInfo.rows[0];
         }
+      } else {
         connect.release();
         return null;
       }
