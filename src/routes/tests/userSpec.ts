@@ -19,7 +19,6 @@ describe("User API Endpoints :", () => {
   beforeAll(async () => {
     const createdUser = await userModel.create(user);
     user.id = createdUser.id;
-    const hpass = createdUser.password;
   });
   afterAll(async () => {
     const connection = await db.connect();

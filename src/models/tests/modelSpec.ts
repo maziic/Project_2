@@ -36,7 +36,7 @@ describe("User Model", () => {
         user.user_name,
         user.password as string
       );
-      //   console.log(authanticateduser, user);
+    
       expect(authanticateduser?.user_name).toBe(user.user_name);
       expect(authanticateduser?.first_name).toBe(user.first_name);
       expect(authanticateduser?.last_name).toBe(user.last_name);
