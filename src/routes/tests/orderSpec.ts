@@ -114,8 +114,8 @@ describe("Order API Endpoints :", () => {
         .set("Content-type", "application/json")
         .set("Authorization", `Bearer ${token}`);
       expect(res.status).toBe(200);
-      const { product_id, quantity, user_id, status } = res.body.data;
-      expect(product_id).toBe(1);
+      const { prod_id, quantity, user_id, status } = res.body.data;
+      expect(prod_id).toBe(1);
       expect(quantity).toBe(1);
       expect(user_id).toBe(1);
       expect(status).toBe("active");

@@ -6,14 +6,19 @@ class OrderModel {
   async createOrder(o: Order): Promise<Order> {
     try {
       const connection = await db.connect();
-      const sql = `INSERT INTO orders(product_id, quantity, user_id, status) VALUES($1, $2, $3, $4)RETURNING*`;
+      const sql = `INSERT INTO orders(quantity, user_id, status) VALUES($1, $2, $3)RETURNING*`;
       const result = await connection.query(sql, [
-        o.product_id,
         o.quantity,
         o.user_id,
         o.status,
       ]);
+      const sql_J = `INSERT INTO makes(prod_id, order_id) VALUES($1, $2)RETURNING*`;
+      const result_J = await connection.query(sql_J, [
+        o.product_id,
+        result.rows[0].id,
+      ]);
       connection.release();
+      result.rows[0].product_id = +o.product_id;
       return result.rows[0];
     } catch (error) {
       throw new Error(
@@ -28,7 +33,10 @@ class OrderModel {
   async showAll(id: string): Promise<Order[]> {
     try {
       const connection = await db.connect();
-      const sql = `SELECT * FROM orders WHERE user_id=$1`;
+      const sql = `SELECT o.id,makes.prod_id,o.quantity,o.user_id,o.status
+      FROM orders AS o 
+      LEFT OUTER JOIN makes ON makes.order_id = o.id
+      WHERE o.user_id = $1;`;
       const result = await connection.query(sql, [id]);
       connection.release();
       return result.rows;
@@ -42,7 +50,10 @@ class OrderModel {
   // Get Current Order Endpoint
   async getCurrent(id: string): Promise<Order> {
     try {
-      const sql = `SELECT * FROM orders WHERE user_id =$1 ORDER BY id DESC LIMIT 1`;
+      const sql = `SELECT o.id,makes.prod_id,o.quantity,o.user_id,o.status
+      FROM orders AS o 
+      LEFT OUTER JOIN makes ON makes.order_id = o.id
+      WHERE user_id =$1 ORDER BY id DESC LIMIT 1`;
       const connection = await db.connect();
       const result = await connection.query(sql, [id]);
       connection.release();
