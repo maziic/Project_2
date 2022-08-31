@@ -8,17 +8,17 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 #### Products
 
-- Index
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
+- Index ( http://localhost:3000/api/products/ Get Method )
+- Show (http://localhost:3000/api/products/:user_ID Get Method [args user_id] )
+- Create [token required] (http://localhost:3000/api/products/ Post Method [args Product] )
 
 #### Users
 
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+- Index [token required] ( http://localhost:3000/api/users/ Get Method )
+- Show [token required] ( http://localhost:3000/api/users/:user_ID Get Method [args user_id] )
+- Create N[token required] ( http://localhost:3000/api/users/ Post Method [args User] )
+- [ADDED] Authenticate ( http://localhost:3000/api/users/authenticate Post Method [args user_name , password] )
+- [ADDED] Delete ( http://localhost:3000/api/users/:user_ID Delete Method [args user_id] )
 
 #### Orders
 
@@ -32,11 +32,12 @@ These are the notes from a meeting with the frontend developer that describe wha
 - id
 - name
 - price
-- [OPTIONAL] category
 
 #### User
 
 - id
+- email
+- user_name
 - firstName
 - lastName
 - password
