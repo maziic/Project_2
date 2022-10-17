@@ -86,4 +86,4 @@ After start up, the server will start on port `3000` and the database on port `5
   Which can be changed to -first_name- last_name -password As was Required but I kept like this as it made
   more sense while creating it and not knowing the required shape but can be changed back if needed.
 
-  Thanks
+  Thanks.
